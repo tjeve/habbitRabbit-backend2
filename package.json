@@ -16,7 +16,9 @@
   "author": "Terrence J. Eveline",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "knex": "^0.20.6",
+    "pg": "^7.17.0"
   },
   "devDependencies": {
     "nodemon": "2.0.2"
