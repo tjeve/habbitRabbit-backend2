@@ -13,7 +13,9 @@ let prepJSON = (data) => {
     return '<pre>' + JSON.stringify(data) + '</pre>'
 }
 
-let allHabitsForAUser = ``
+let allHabitsForAUser = `
+
+`
 
 let getUsers = db('Users')
                 .then(function(users){
@@ -28,7 +30,11 @@ let getHabits = db('Habits')
                     // console.log(habits)
                     return habits
                 })
-
+let addHabitQuery = db(habit)
+                .insert({
+                    user_id: 'SEND USERID HERE',
+                    habit: 'INSERT TYPED TEXT HERE'
+                })
 // ********************** Routes **********************
 app.get('/', (req, res) => res.send(
     'Hello World!'
@@ -43,8 +49,8 @@ app.get('/habits', (req, res) => res.send(
 ))
 
 //--> Adds a habit from a User to their list of Habits
-app.post('/addHabit', (req, res) => req.send(
-
+app.post('/add-new-habbit', (req, res) => req.send(
+    addHabitQuery
 ))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
