@@ -13,24 +13,35 @@ let prepJSON = (data) => {
     return '<pre>' + JSON.stringify(data) + '</pre>'
 }
 
-let allHabitsForAUser = `
+function createHabit (userID, newHabit) {
+    return db.raw(
+        'INSERT INTO "Habits" ("user_id", "habit") Values (?, ?)',
+        [userID, newHabit]
+    )
+}
 
-`
-
-let getUsers = db('Users')
+const getUsers = db('Users')
                 .then(function(users){
                     let getName = (user) => { return user.name}
-                    let names = users.map(getName)
-                    console.log(names)
+                    // let names = users.map(getName)
+                    // console.log(names)
                     return users
                 })
 
-let getHabits = db('Habits')
+const getHabits = db('Habits')
                 .then(function(habits) {
                     // console.log(habits)
                     return habits
                 })
-let addHabitQuery = db(habit)
+
+const getUserHabits = db('Habits')
+                .where({user_id: 7}) // <-- Will find all habits from User 7
+                .then(function(habits) {
+                    console.log(habits)
+                    return habits
+                })
+
+let addHabitQuery = db('Habits')
                 .insert({
                     user_id: 'SEND USERID HERE',
                     habit: 'INSERT TYPED TEXT HERE'
@@ -47,10 +58,15 @@ app.get('/users', (req, res) => res.send(
 app.get('/habits', (req, res) => res.send(
     '<pre>' + JSON.stringify(getHabits, null, 4) + '</pre>'
 ))
+//--> Displays all the habits for one user
+app.get('/user-habits', (req, res) => res.send(
+    '<pre>' + JSON.stringify(getUserHabits, null, 4) + '</pre>'
+))
 
 //--> Adds a habit from a User to their list of Habits
 app.post('/add-new-habbit', (req, res) => req.send(
-    addHabitQuery
+    console.log(req.body)
+    // createHabit()
 ))
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
