@@ -9,7 +9,7 @@ const db = require('knex')(dbconfigs.development)
 const query = require("./queries.js")
 
 // ********************** SQL Queries **********************
-let prepJSON = (data) => {
+let makeJSON = (data) => {
     return '<pre>' + JSON.stringify(data) + '</pre>'
 }
 
@@ -34,12 +34,25 @@ const getHabits = db('Habits')
                     return habits
                 })
 
-const getUserHabits = db('Habits')
-                .where({user_id: 7}) // <-- Will find all habits from User 7
+const getUserHabitsQuery =
+    `SELECT "Users"."id", "Users"."name","Users"."slug","Habits"."habit"
+    FROM "Users" 
+    JOIN "Habits" 
+    On "Users"."id" = "Habits"."user_id" 
+    order by "Users"."id"`
+const getUserHabits = db
+                .raw(getUserHabitsQuery)
                 .then(function(habits) {
                     console.log(habits)
-                    return habits
+                    return habits.rows
                 })
+
+// const getUserHabits = db('Habits')
+//                 .where({user_id: 7}) // <-- Will find all habits from User 7
+//                 .then(function(habits) {
+//                     console.log(habits)
+//                     return habits
+//                 })
 
 let addHabitQuery = db('Habits')
                 .insert({
@@ -52,15 +65,15 @@ app.get('/', (req, res) => res.send(
 ))
 //--> Displays all Users
 app.get('/users', (req, res) => res.send(
-    '<pre>' + JSON.stringify(getUsers, null, 4) + '</pre>'
+    makeJSON(getUsers)
 ))
 //--> Displays a Users list of Habits
 app.get('/habits', (req, res) => res.send(
-    '<pre>' + JSON.stringify(getHabits, null, 4) + '</pre>'
+    makeJSON(getHabits)
 ))
 //--> Displays all the habits for one user
 app.get('/user-habits', (req, res) => res.send(
-    '<pre>' + JSON.stringify(getUserHabits, null, 4) + '</pre>'
+    getUserHabits
 ))
 
 //--> Adds a habit from a User to their list of Habits
