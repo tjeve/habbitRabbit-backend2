@@ -62,7 +62,7 @@ const getUserHabitsQuery =
     On "Users"."id" = "Habits"."user_id"
     WHERE "Users"."id" = ?
     order by "Users"."id"`
-const getUserHabits = (userId) => { //<-- Test in Postman: Choose Post, then click body, and enter an object, {"userand press sne
+const getUserHabits = (userId) => { //<-- Test in Postman: Choose Post, then click body, and enter an object with the correct keys and values, then press send
    return  db
             .raw(getUserHabitsQuery, [userId])
             .then(function(habits) {
