@@ -25,12 +25,6 @@ let makeJSON = (data) => {
     return '<pre>' + JSON.stringify(data) + '</pre>'
 }
 
-// function createHabit (userID, newHabit) {
-//     return db.raw(
-//         'INSERT INTO "Habits" ("user_id", "habit") Values (?, ?)',
-//         [userID, newHabit]
-//     )
-// }
 function createHabit (user) {
     console.log("userID:", user.user_id)
     console.log("newHabit:", user.habit)
@@ -54,7 +48,6 @@ const getHabits = db('Habits')
                     return habits
                 })
 
-// UNCOMMENT WHEN YOU FIGURE OUT HOW TO QUERY
 const getUserHabitsQuery =
     `SELECT "Users"."id", "Users"."name","Users"."slug","Habits"."habit"
     FROM "Users" 
@@ -72,11 +65,6 @@ const getUserHabits = (userId) => { //<-- Test in Postman: Choose Post, then cli
 
 }
 
-let addHabitQuery = db('Habits')
-                .insert({
-                    user_id: 'SEND USERID HERE',
-                    habit: 'INSERT TYPED TEXT HERE'
-                })
 // ********************** Routes **********************
 app.get('/', (req, res) => res.send(
     'Hello World!'
@@ -97,6 +85,7 @@ app.get('/user-habits/:userId', (req, res) => { // <-- You will eventually be ab
             res.send(makeJSON(result))
         })
         .catch(function(error) {
+            console.log(error)
             res.status(404).send("Page Not Found")
         })
     
