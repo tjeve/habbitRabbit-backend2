@@ -66,9 +66,9 @@ const getUserHabits = (userId) => { //<-- Test in Postman: Choose Post, then cli
 }
 
 // ********************** Routes **********************
-app.get('/', (req, res) => res.send(
-    'Hello World!'
-))
+app.get('/', (req, res) => {res.send(
+    fs.readFileSync('./index.html', 'utf8')
+    )})
 //--> Displays all Users
 app.get('/users', (req, res) => res.send(
     makeJSON(getUsers)
@@ -102,12 +102,25 @@ app.post('/add-new-habit', (req, res) => {
         console.warn("Something's Wrong!", error)
     })
 })
+app.post('/add-user', (req, res) => {
 
-app.post('/login', passport.authenticate('local', { 
-    successRedirect: '/', 
-    failureRedirect: '/login' 
-}));
+})
 
+// =============== Facebook Routes ===================
+app.get('/auth/facebook', passport.authenticate('facebook'))
+  
+app.get(
+    '/auth/facebook/callback',
+    passport.authenticate('facebook', { 
+        successRedirect: '/',
+        failureRedirect: '/auth' 
+    }),
+    function (req, res) {
+    console.log(res.body)
+    // Successful authentication, redirect home.
+    res.redirect('/')
+    }
+)
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 require('./auth-facebook.js')(app, passport)
