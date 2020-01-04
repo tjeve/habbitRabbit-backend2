@@ -1,3 +1,6 @@
+const dbconfigs = require("./knexfile.js")
+const db = require('knex')(dbconfigs.development)
+
 module.exports = function (app, passport) {
     // ========== Facebook OAuth ==========
   
@@ -10,19 +13,47 @@ module.exports = function (app, passport) {
           callbackURL: 'http://localhost:3000/auth/facebook/callback' // <-- Insert deployed address here (It didn't initally work because you left out the http, once you did that the warning from facebook went away)
         },
         function (accessToken, refereshToken, profile, cb) {
-          console.log('auth-facebook line 13', profile.id, profile.displayName, profile)
-          console.log(profile)
-          return cb(null, profile)
+          return createUser(profile)
+            .then(function (result) {
+              cb(null, result)
+            })
         }
-  
+        
       )
     )
   
+    function createUser(user) {
+      let addUserQuery = 'INSERT INTO "Users" ("id", "name", "slug") Values (?, ?, ?)'
+      let searchUserQuery = 'SELECT * FROM "Users" WHERE "Users"."id" = ?'
+     
+        return db
+          .raw(searchUserQuery, [user.id])
+          .then(function (result) {
+            if (result.rows.length === 0) {
+              return db.raw(addUserQuery, [user.id, user.displayName, createSlug(user.displayName)] )
+            }
+          })
+          .then(function() {
+            return db.raw(searchUserQuery, [user.id] )
+          })
+          .then(function(result) {
+            return result.rows[0]
+          })
+
+
+  }
+  
+  const createSlug = (name) => {
+    return name.replace(/\s/g, '-').replace(/'/g, '').toLowerCase()
+  }
+
     passport.serializeUser(function (user, cb) {
+      console.log("passport.serializeUser --> ", user )
       cb(null, user)
     })
   
     passport.deserializeUser(function (obj, cb) {
+      console.log("passport.deserializeUser -->", obj )
       cb(null, obj)
     })
   
@@ -32,19 +63,22 @@ module.exports = function (app, passport) {
     // ============= END ===============
   
     // ========== Passport-facebook routes ==========
-    app.get('/auth/facebook', passport.authenticate('facebook'))
+    
+// =============== Facebook Routes ===================
+app.get('/auth/facebook', passport.authenticate('facebook'))
   
-    app.get(
-      '/auth/facebook/callback',
-      passport.authenticate('facebook', { 
-        successRedirect: '/',
-        failureRedirect: '/auth/facebook' }),
-      function (req, res) {
-        console.log('successful authentication: line 42 of auth-facebook', res)
-        // Successful authentication, redirect home.
-        res.redirect('/')
-      }
-    )
+app.get(
+    '/auth/facebook/callback',
+    passport.authenticate('facebook', { 
+        successRedirect: '/user-habits/',
+        failureRedirect: '/auth' 
+    }),
+    function (req, res) {
+    console.log(res.body)
+    // Successful authentication, redirect home.
+    res.redirect('/')
+    }
+)
     // ================= END ======================
   }
   

@@ -8,15 +8,15 @@ const dbconfigs = require("./knexfile.js")
 const db = require('knex')(dbconfigs.development)
 const query = require("./queries.js")
 
-// // ========== Express Session ==========
-// const session = require('express-session')
-// app.use(
-//   session({
-//     secret: 'p3qbvkefashf4h2q',
-//     resave: false,
-//     saveUninitialized: false
-//   })
-// )
+// ========== Express Session ==========
+const session = require('express-session')
+app.use(
+  session({
+    secret: 'p3qbvkefashf4h2q',
+    resave: false,
+    saveUninitialized: false
+  })
+)
 
 // ========== Setup Passport ==========
 const passport = require('passport')
@@ -68,8 +68,8 @@ const getUserHabits = (userId) => { //<-- Test in Postman: Choose Post, then cli
                 console.log(habits.rows)
                 return habits.rows
             })
-
 }
+
 
 // ********************** Routes **********************
 app.get('/', (req, res) => {res.send(
@@ -84,10 +84,14 @@ app.get('/habits', (req, res) => res.send(
     makeJSON(getHabits)
 ))
 //--> Displays all the habits for one user
-app.get('/user-habits/:userId', (req, res) => { // <-- You will eventually be able to remove the :userID once you get the Oauth working. 
-    getUserHabits(req.params.userId) // <-- Once Oauth is running you can use the User object you get back from facebook to find the userid. Might look something like "req.params.userId", console log it first
+app.get('/user-habits/', (req, res) => { // <-- You will eventually be able to remove the :userID once you get the Oauth working. 
+    if (!req.user) {
+        res.redirect('/auth/facebook')
+      }
+      console.log("req.user.id", req.user.id)
+    getUserHabits(req.user.id) // <-- Once Oauth is running you can use the User object you get back from facebook to find the userid. Might look something like "req.params.userId", console log it first
         .then(function(result) {
-            console.log(result, "Line 103 -- /user-habits/:userId")
+            console.log("Line 91-- /user-habits/", result)
             res.send(makeJSON(result))
         })
         .catch(function(error) {
@@ -102,31 +106,16 @@ app.get('/user-habits/:userId', (req, res) => { // <-- You will eventually be ab
 app.post('/add-new-habit', (req, res) => {
     createHabit(req.body)
     .then(function(result) {
-        res.send(result)
+        res.send("Habit successfully added")
     })
     .catch(function(error) {
         console.warn("Something's Wrong!", error)
     })
 })
 app.post('/add-user', (req, res) => {
-
+    res.send()
 })
 
-// =============== Facebook Routes ===================
-app.get('/auth/facebook', passport.authenticate('facebook'))
-  
-app.get(
-    '/auth/facebook/callback',
-    passport.authenticate('facebook', { 
-        successRedirect: '/user-habits/7',
-        failureRedirect: '/auth' 
-    }),
-    function (req, res) {
-    console.log(res.body)
-    // Successful authentication, redirect home.
-    res.redirect('/')
-    }
-)
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 require('./auth-facebook.js')(app, passport)
