@@ -10,7 +10,7 @@ exports.seed = function(knex) {
       .replace(/'/g, '')
       .toLowerCase()
     fakeData.push({
-      id: idx,
+      id: idx+9999999,
       name: fakerName,
       slug: fakerSlug,
     })

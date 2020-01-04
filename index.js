@@ -8,6 +8,16 @@ const dbconfigs = require("./knexfile.js")
 const db = require('knex')(dbconfigs.development)
 const query = require("./queries.js")
 
+// // ========== Express Session ==========
+// const session = require('express-session')
+// app.use(
+//   session({
+//     secret: 'p3qbvkefashf4h2q',
+//     resave: false,
+//     saveUninitialized: false
+//   })
+// )
+
 // ========== Setup Passport ==========
 const passport = require('passport')
 app.use(passport.initialize())
@@ -15,10 +25,6 @@ app.use(passport.session())
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
-
-
-
 
 // ********************** SQL Queries **********************
 let makeJSON = (data) => {
@@ -112,7 +118,7 @@ app.get('/auth/facebook', passport.authenticate('facebook'))
 app.get(
     '/auth/facebook/callback',
     passport.authenticate('facebook', { 
-        successRedirect: '/',
+        successRedirect: '/user-habits/7',
         failureRedirect: '/auth' 
     }),
     function (req, res) {

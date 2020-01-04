@@ -7,6 +7,6 @@ exports.up = function (knex) {
 
 exports.down = function(knex) {
     return knex.schema.alterTable('Habits', function (table) {
-        table.dropColumn('userId')
+        table.dropColumn('user_id')
       })
 };

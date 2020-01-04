@@ -10,7 +10,7 @@ module.exports = function (app, passport) {
           callbackURL: 'http://localhost:3000/auth/facebook/callback' // <-- Insert deployed address here (It didn't initally work because you left out the http, once you did that the warning from facebook went away)
         },
         function (accessToken, refereshToken, profile, cb) {
-          console.log('auth-facebook line 13', profile.id, profile.displayName)
+          console.log('auth-facebook line 13', profile.id, profile.displayName, profile)
           console.log(profile)
           return cb(null, profile)
         }
