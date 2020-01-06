@@ -47,11 +47,17 @@ const getUsers = db('Users')
                     // console.log(names)
                     return users
                 })
+                .catch(function(error){
+                    console.log("No Users found here", error)
+                })
 
 const getHabits = db('Habits')
                 .then(function(habits) {
                     // console.log(habits)
                     return habits
+                })
+                .catch(function(error){
+                    console.log("No Habits found", error)
                 })
 
 const getUserHabitsQuery =
@@ -67,6 +73,9 @@ const getUserHabits = (userId) => { //<-- Test in Postman: Choose Post, then cli
             .then(function(habits) {
                 console.log(habits.rows)
                 return habits.rows
+            })
+            .catch(function(error){
+                console.log("No Habits found for this User", error)
             })
 }
 
