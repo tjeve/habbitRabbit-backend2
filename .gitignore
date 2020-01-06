@@ -1,3 +1,9 @@
 .DS_Store
 node_modules
 habbitrabbit_database
+
+/node_modules
+npm-debug.log
+.DS_Store
+/*.env
+
