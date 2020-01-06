@@ -2,7 +2,7 @@
 habbit Rabbit is the backend server for the app called Habbit Rabbit.
 
 ## About Habbit Rabbit
-Habbit Rabbit is a web App built with Expo and React-Native that tracks productive habits that you want to build and monitors your progress towards developing them.
+Habbit Rabbit is a web App built with Expo and React-Native that tracks productive habits that you want to build and monitors your progress towards developing them. This repo holds the backend 
 
 ## Technologies Used
 | Technology                          | Purpose                                                                                                                       |
