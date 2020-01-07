@@ -34,9 +34,11 @@ let makeJSON = (data) => {
 function createHabit (user) {
     console.log("userID:", user.user_id)
     console.log("newHabit:", user.habit)
+    let idToInsert = 30
+    idToInsert++
     return db.raw(
-        'INSERT INTO "Habits" ("user_id", "habit") Values (?, ?)',
-        [user.user_id, user.habit]
+        'INSERT INTO "Habits" ("id","user_id", "habit") Values (?, ?, ?)',
+        [idToInsert, user.user_id, user.habit]
     )
 }
 
@@ -122,7 +124,7 @@ app.post('/add-new-habit', (req, res) => {
     })
     .catch(function(error) {
         console.warn("Something's Wrong!", error)
-        res.status(500).send('No Posts found')
+        res.status(500).send('error')
     })
 })
 app.post('/add-user', (req, res) => {

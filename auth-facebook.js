@@ -70,11 +70,12 @@ app.get('/auth/facebook', passport.authenticate('facebook'))
 app.get(
     '/auth/facebook/callback',
     passport.authenticate('facebook', { 
-        successRedirect: '/user-habits/',
+        successRedirect: 'exp://127.0.0.1:19000',
         failureRedirect: '/auth/facebook' 
     }),
     function (req, res) {
-    console.log(res.body)
+    console.log(res.body, "Res BODY")
+    console.log(req.user)
     // Successful authentication, redirect home.
     res.redirect('/')
     }
