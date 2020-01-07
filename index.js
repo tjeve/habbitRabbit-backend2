@@ -34,11 +34,9 @@ let makeJSON = (data) => {
 function createHabit (user) {
     console.log("userID:", user.user_id)
     console.log("newHabit:", user.habit)
-    let idToInsert = 30
-    idToInsert++
     return db.raw(
-        'INSERT INTO "Habits" ("id","user_id", "habit") Values (?, ?, ?)',
-        [idToInsert, user.user_id, user.habit]
+        'INSERT INTO "Habits" ("user_id", "habit") Values (?, ?)',
+        [user.user_id, user.habit]
     )
 }
 
