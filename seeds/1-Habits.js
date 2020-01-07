@@ -12,9 +12,9 @@ exports.seed = function(knex) {
   for (let idx = 0; idx < userCount; idx++) {
     const fakeHabit = faker.lorem.words()
     fakeData.push({
-      id: idx.toString(),
+      // id: idx.toString(),
       user_id: userIDs[randomUserId(8)],
-      habit: fakeHabit,
+      habit: fakeHabit
     })
   }
   // Deletes ALL existing entries
