@@ -63,7 +63,7 @@ const getHabits = db('Habits')
                 })
 
 const getUserHabitsQuery =
-    `SELECT "Users"."id", "Users"."name","Users"."slug","Habits"."habit"
+    `SELECT "Users"."id", "Users"."name","Users"."slug","Habits"."habit","Habits"."start_date"
     FROM "Users" 
     JOIN "Habits" 
     On "Users"."id" = "Habits"."user_id"
@@ -118,15 +118,13 @@ app.get('/user-habits/', (req, res) => { // <-- You will eventually be able to r
 app.post('/add-new-habit', (req, res) => {
     createHabit(req.body)
     .then(function(result) {
-        res.send("Habit successfully added")
+        console.log("result from createHabit", result)
+        res.send("Congratulations!!! Your habit was added to the database")
     })
     .catch(function(error) {
         console.warn("Something's Wrong!", error)
-        res.status(500).send('No Posts found')
+        res.status(500).send("Something's Wrong")
     })
-})
-app.post('/add-user', (req, res) => {
-    res.send()
 })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
