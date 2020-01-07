@@ -103,7 +103,7 @@ app.get('/user-habits/', (req, res) => { // <-- You will eventually be able to r
     //   console.log("req.user.id", req.user.id)
     getUserHabits(req.user.id) // <-- Once Oauth is running you can use the User object you get back from facebook to find the userid. Might look something like "req.params.userId", console log it first
         .then(function(result) {
-            console.log("Line 91-- /user-habits/", result)
+            console.log("This is the result of following the route /user-habits/:", result)
             res.send(makeJSON(result))
         })
         .catch(function(error) {
@@ -118,7 +118,7 @@ app.get('/user-habits/', (req, res) => { // <-- You will eventually be able to r
 app.post('/add-new-habit', (req, res) => {
     createHabit(req.body)
     .then(function(result) {
-        console.log("result from createHabit", result)
+        console.log("Result from createHabit: ", result)
         res.send("Congratulations!!! Your habit was added to the database")
     })
     .catch(function(error) {
