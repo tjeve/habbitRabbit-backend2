@@ -42,7 +42,7 @@ function createHabit (user) {
 
 const getUsers = db('Users')
                 .then(function(users){
-                    let getName = (user) => { return user.name}
+                    // let getName = (users) => { return users.name}
                     // let names = users.map(getName)
                     // console.log(names)
                     return users
@@ -100,7 +100,7 @@ app.get('/user-habits/', (req, res) => { // <-- You will eventually be able to r
     if (!req.user) {
         res.redirect('/auth/facebook')
       }
-      console.log("req.user.id", req.user.id)
+    //   console.log("req.user.id", req.user.id)
     getUserHabits(req.user.id) // <-- Once Oauth is running you can use the User object you get back from facebook to find the userid. Might look something like "req.params.userId", console log it first
         .then(function(result) {
             console.log("Line 91-- /user-habits/", result)
