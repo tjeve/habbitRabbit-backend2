@@ -49,6 +49,7 @@ const getUsers = db('Users')
                 })
                 .catch(function(error){
                     console.log("No Users found here", error)
+                    res.status(500).send('No Users found')
                 })
 
 const getHabits = db('Habits')
@@ -58,6 +59,7 @@ const getHabits = db('Habits')
                 })
                 .catch(function(error){
                     console.log("No Habits found", error)
+                    res.status(500).send('No Habits found')
                 })
 
 const getUserHabitsQuery =
@@ -76,6 +78,7 @@ const getUserHabits = (userId) => { //<-- Test in Postman: Choose Post, then cli
             })
             .catch(function(error){
                 console.log("No Habits found for this User", error)
+                res.status(500).send('No User Habits found')
             })
 }
 
@@ -119,6 +122,7 @@ app.post('/add-new-habit', (req, res) => {
     })
     .catch(function(error) {
         console.warn("Something's Wrong!", error)
+        res.status(500).send('No Posts found')
     })
 })
 app.post('/add-user', (req, res) => {
